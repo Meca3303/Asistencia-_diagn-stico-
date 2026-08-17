@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistencia de Diagnóstico</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#0b1220;color:#fff}
+header{padding:22px 18px;text-align:center;background:#111c30;border-bottom:1px solid #26344d}
+.logo{font-size:28px;font-weight:800}.sub{color:#aebbd0;margin-top:6px}
+main{max-width:760px;margin:28px auto;padding:0 16px}
+.card{background:#121d31;border:1px solid #26344d;border-radius:18px;padding:24px;box-shadow:0 12px 30px #0004}
+h1{margin-top:0;font-size:25px}label{display:block;margin:16px 0 7px;font-weight:700}
+input,select,textarea{width:100%;padding:13px;border-radius:10px;border:1px solid #35445e;background:#0b1424;color:#fff;font-size:15px}
+textarea{min-height:110px;resize:vertical}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{width:100%;padding:15px;margin-top:20px;border:0;border-radius:11px;background:#1683ff;color:white;font-weight:800;font-size:16px;cursor:pointer}
+button:hover{filter:brightness(1.1)}
+#result{display:none;margin-top:20px;padding:18px;border-radius:12px;background:#0b1424;border:1px solid #35445e}
+.badge{display:inline-block;padding:6px 10px;border-radius:20px;background:#1d3557;color:#9fd0ff;font-size:13px}
+li{margin:9px 0;color:#d8e2f0}
+footer{text-align:center;color:#8391a7;padding:30px 10px;font-size:13px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.logo{font-size:24px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🔧 Asistencia de Diagnóstico</div>
+  <div class="sub">Diagnóstico mecánico y eléctrico de vehículos</div>
+</header>
+
+<main>
+<section class="card">
+<h1>🔍 Iniciar diagnóstico</h1>
+<p>Introduce los datos del vehículo y describe el problema.</p>
+
+<div class="grid">
+<div><label>Marca</label><select id="marca"><option value="">Selecciona</option><option>Mercedes-Benz</option><option>BMW</option><option>Volkswagen</option><option>Audi</option><option>Opel</option><option>Peugeot</option><option>Renault</option><option>Ford</option><option>Toyota</option><option>SEAT</option><option>Otra</option></select></div>
+<div><label>Modelo</label><input id="modelo" placeholder="Ej.: Sprinter"></div>
+</div>
+
+<div class="grid">
+<div><label>Año</label><input id="anio" type="number" placeholder="Ej.: 2016"></div>
+<div><label>Motor</label><input id="motor" placeholder="Ej.: 2.2 CDI"></div>
+</div>
+
+<label>Tipo de avería</label>
+<select id="tipo">
+<option value="">Selecciona</option>
+<option>🔧 Mecánica</option>
+<option>⚡ Electricidad</option>
+<option>💻 Electrónica / OBD</option>
+<option>🚨 Testigo de avería</option>
+</select>
+
+<label>Síntomas o código de avería</label>
+<textarea id="sintomas" placeholder="Ej.: No arranca, pierde potencia, se enciende el testigo motor..."></textarea>
+
+<button onclick="diagnosticar()">🔍 ANALIZAR AVERÍA</button>
+
+<div id="result"></div>
+</section>
+</main>
+
+<footer>Asistencia de Diagnóstico · Primera versión</footer>
+
+<script>
+function diagnosticar(){
+ const marca=document.getElementById('marca').value;
+ const modelo=document.getElementById('modelo').value;
+ const tipo=document.getElementById('tipo').value;
+ const sintomas=document.getElementById('sintomas').value.trim();
+ const r=document.getElementById('result');
+
+ if(!marca || !modelo || !tipo || !sintomas){
+   r.style.display='block';
+   r.innerHTML='<b>⚠️ Faltan datos</b><p>Completa marca, modelo, tipo de avería y síntomas.</p>';
+   return;
+ }
+
+ let pruebas=[
+   'Comprobar batería y tensión de alimentación.',
+   'Revisar fusibles, masas y conectores relacionados.',
+   'Realizar una lectura de códigos de avería con OBD.',
+   'Comprobar los valores de los sensores y actuadores relacionados.',
+   'No sustituir piezas hasta confirmar la causa mediante mediciones.'
+ ];
+
+ if(tipo.includes('Mecánica')){
+   pruebas=[
+    'Inspección visual de fugas, conexiones y componentes.',
+    'Comprobar niveles y estado de los fluidos.',
+    'Escuchar ruidos anormales y localizar su origen.',
+    'Realizar las pruebas mecánicas correspondientes.',
+    'Confirmar la avería antes de sustituir componentes.'
+   ];
+ }
+
+ if(tipo.includes('Electricidad') || tipo.includes('Electrónica')){
+   pruebas=[
+    'Medir tensión de batería y alimentación del circuito.',
+    'Comprobar masas y continuidad del cableado.',
+    'Revisar fusibles, relés y conectores.',
+    'Leer códigos OBD y comprobar datos en tiempo real.',
+    'Comprobar señales de sensores y actuadores con multímetro u osciloscopio cuando corresponda.'
+   ];
+ }
+
+ r.style.display='block';
+ r.innerHTML=`<span class="badge">Resultado preliminar</span>
+ <h2>Posibles causas</h2>
+ <p>Para <b>${marca} ${modelo}</b>, el problema indicado es: <b>${sintomas}</b>.</p>
+ <p>Con estos datos todavía no se puede confirmar una causa única. Estas son las primeras comprobaciones recomendadas:</p>
+ <ul>${pruebas.map(x=>'<li>'+x+'</li>').join('')}</ul>
+ <p><b>⚠️ Importante:</b> este resultado es orientativo. Un diagnóstico profesional debe confirmarse con mediciones y documentación técnica del vehículo.</p>`;
+}
+</script>
+</body>
+</html>
